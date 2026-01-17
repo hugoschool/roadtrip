@@ -223,9 +223,13 @@ class Module {
 
     projectAddOnClick() {
         this.projects_button.onclick = () => {
-            const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this.projects_ul.id);
+            const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
             this.projects.push(project);
         };
+    }
+
+    projectRemove(i) {
+        this.projects.pop(i);
     }
 }
 
@@ -233,30 +237,42 @@ class Project {
     name;
     index;
     prefix;
+    module;
 
     ul;
+    li;
     delete_button;
 
-    constructor(name, index, prefix, projects_ul_id) {
+    constructor(name, index, prefix, module) {
         this.name = name;
         this.index = index;
         this.prefix = `${prefix}-${this.index}`;
-        this.ul = document.getElementById(projects_ul_id);
+        this.module = module;
+        this.ul = this.module.projects_ul;
 
         this.create();
     }
 
     create() {
-        const li = document.createElement("li");
-        li.id = this.prefix;
-        li.innerText = this.name;
+        this.li = document.createElement("li");
+        this.li.id = this.prefix;
+        this.li.innerText = this.name;
 
         this.delete_button = document.createElement("button");
         this.delete_button.id = `${this.prefix}-delete`;
         this.delete_button.innerText = "Delete";
 
-        li.append(this.delete_button);
-        this.ul.append(li);
+        this.deleteButtonOnClick();
+
+        this.li.append(this.delete_button);
+        this.ul.append(this.li);
+    }
+
+    deleteButtonOnClick() {
+        this.delete_button.onclick = () => {
+            this.ul.removeChild(this.li);
+            this.module.projectRemove(this.index);
+        };
     }
 }
 
