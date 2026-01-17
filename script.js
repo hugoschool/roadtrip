@@ -57,6 +57,7 @@ class Roadblock {
         this.createRequired();
         this.createCurrent();
         this.createModulesStructure();
+        this.div.append(document.createElement("hr"));
     }
 
     createDiv() {
@@ -66,10 +67,17 @@ class Roadblock {
     }
 
     createName() {
+        const id = `${this.prefix}-name`;
+        const label = document.createElement("label");
+        label.setAttribute("for", id);
+        label.innerText = "Roadblock Name";
+
         this.name_input = document.createElement("input");
-        this.name_input.id = `${this.prefix}-name`;
+        this.name_input.id = id;
         this.name_input.placeholder = "Roadblock Name";
         this.name_input.value = this.name;
+
+        this.div.append(label);
         this.div.append(this.name_input);
     }
 
@@ -115,9 +123,14 @@ class Roadblock {
         this.modules_div = document.createElement("div");
         this.modules_div.id = `${modules_prefix}-projects`;
 
+        let id = `${modules_prefix}-name`;
+        const modules_label = document.createElement("label");
+        modules_label.setAttribute("for", id);
+        modules_label.innerText = "Module Name";
+
         this.modules_input = document.createElement("input");
-        this.modules_input.id = `${modules_prefix}-name`;
-        this.modules_input.placeholder = `Module Name`;
+        this.modules_input.id = id;
+        this.modules_input.placeholder = "Module Name";
 
         this.modules_button = document.createElement("button");
         this.modules_button.id = `${modules_prefix}-add`;
@@ -125,6 +138,7 @@ class Roadblock {
 
         div.append(title);
         div.append(this.modules_div);
+        div.append(modules_label);
         div.append(this.modules_input);
         div.append(this.modules_button);
         this.div.append(div);
@@ -187,13 +201,21 @@ class Module {
         this.createCredits();
         this.createTaking();
         this.createProjects();
+        this.div.append(document.createElement("hr"));
     }
 
     createName() {
+        const id = `${this.prefix}-module_name`;
+        const label = document.createElement("label");
+        label.setAttribute("for", id);
+        label.innerText = "Module Name";
+
         this.name_input = document.createElement("input");
+        this.name_input.id = id;
         this.name_input.value = this.name;
         this.name_input.placeholder = "Module Name";
 
+        this.div.append(label);
         this.div.append(this.name_input);
     }
 
