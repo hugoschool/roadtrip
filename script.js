@@ -82,6 +82,7 @@ class Roadblock {
 
         this.required_input = document.createElement("input");
         this.required_input.id = id;
+        this.required_input.setAttribute("type", "number");
         this.required_input.placeholder = "None";
 
         div.append(label);
@@ -133,9 +134,19 @@ class Roadblock {
 
     modulesAddOnClick() {
         this.modules_button.onclick = () => {
-            const module = new Module(this.modules_input.value, this.modules.length, this.index, this.modules_div.id);
+            const module = new Module(this.modules_input.value, this.modules.length, this.index, this.modules_div.id, this);
             this.modules.push(module);
         };
+    }
+
+    calculateCredits() {
+        this.current_credits = 0;
+        for (const module of this.modules) {
+            if (module.isTaking()) {
+                this.current_credits += module.credits;
+            }
+        }
+        this.current_span.innerText = this.current_credits;
     }
 }
 
@@ -146,7 +157,9 @@ class Module {
     prefix;
     roadblock_index;
     div;
+    roadblock;
 
+    credits;
     projects;
 
     name_input;
@@ -156,12 +169,14 @@ class Module {
     projects_ul;
     taking_checkbox;
 
-    constructor(name, index, roadblock_index, div_id) {
+    constructor(name, index, roadblock_index, div_id, roadblock) {
         this.name = name;
         this.index = index;
         this.roadblock_index = roadblock_index;
         this.prefix = `module-${this.roadblock_index}-${this.index}`;
         this.div = document.getElementById(div_id);
+        this.roadblock = roadblock;
+        this.credits = 0;
         this.projects = [];
 
         this.createAll();
@@ -191,7 +206,10 @@ class Module {
 
         this.credits_input = document.createElement("input");
         this.credits_input.id = id;
+        this.credits_input.setAttribute("type", "number");
         this.credits_input.placeholder = "None";
+
+        this.creditsOnChange();
 
         div.append(label);
         div.append(this.credits_input);
@@ -207,6 +225,8 @@ class Module {
         this.taking_checkbox = document.createElement("input");
         this.taking_checkbox.id = id;
         this.taking_checkbox.setAttribute("type", "checkbox");
+
+        this.checkboxOnChange();
 
         this.div.append(label);
         this.div.append(this.taking_checkbox);
@@ -237,6 +257,19 @@ class Module {
         this.projectAddOnClick();
     }
 
+    creditsOnChange() {
+        this.credits_input.onchange = () => {
+            this.credits = parseInt(this.credits_input.value);
+            this.roadblock.calculateCredits();
+        };
+    }
+
+    checkboxOnChange() {
+        this.taking_checkbox.onchange = () => {
+            this.roadblock.calculateCredits();
+        }
+    }
+
     projectAddOnClick() {
         this.projects_button.onclick = () => {
             const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
@@ -246,6 +279,10 @@ class Module {
 
     projectRemove(i) {
         this.projects.pop(i);
+    }
+
+    isTaking() {
+        return this.taking_checkbox.checked;
     }
 }
 
