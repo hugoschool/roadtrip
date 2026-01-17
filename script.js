@@ -154,6 +154,7 @@ class Module {
     projects_input;
     projects_button;
     projects_ul;
+    taking_checkbox;
 
     constructor(name, index, roadblock_index, div_id) {
         this.name = name;
@@ -169,6 +170,7 @@ class Module {
     createAll() {
         this.createName();
         this.createCredits();
+        this.createTaking();
         this.createProjects();
     }
 
@@ -194,6 +196,20 @@ class Module {
         div.append(label);
         div.append(this.credits_input);
         this.div.append(div);
+    }
+
+    createTaking() {
+        const id = `${this.prefix}-taking`;
+        const label = document.createElement("label");
+        label.setAttribute("for", id);
+        label.innerText = "Taking";
+
+        this.taking_checkbox = document.createElement("input");
+        this.taking_checkbox.id = id;
+        this.taking_checkbox.setAttribute("type", "checkbox");
+
+        this.div.append(label);
+        this.div.append(this.taking_checkbox);
     }
 
     createProjects() {
