@@ -72,14 +72,14 @@ class NewRoadblock {
     name;
     add;
 
-    addRoadblock() {
+    roadblockAdd() {
         const roadblock = new Roadblock(this.name.value, roadblocks.length);
         roadblocks.push(roadblock);
     }
 
     onClick() {
         this.add.onclick = () => {
-            this.addRoadblock();
+            this.roadblockAdd();
         }
     }
 
@@ -88,7 +88,7 @@ class NewRoadblock {
             if (e.key !== "Enter") {
                 return
             }
-            this.addRoadblock();
+            this.roadblockAdd();
         }
     }
 
