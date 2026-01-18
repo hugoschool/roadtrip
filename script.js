@@ -56,13 +56,9 @@ class Total {
     }
 
     calculate() {
-        const total = roadblocks.map((roadblock) => roadblock.current_credits);
+        const total = roadblocks.reduce((acc, roadblock) => acc + roadblock.current_credits, 0);
 
-        if (total.length === 0) {
-            this.total_element.innerText = 0;
-        } else {
-            this.total_element.innerText = total;
-        }
+        this.total_element.innerText = total;
     }
 }
 
