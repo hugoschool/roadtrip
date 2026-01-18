@@ -75,6 +75,7 @@ class NewRoadblock {
     roadblockAdd() {
         const roadblock = new Roadblock(this.name.value, roadblocks.length);
         roadblocks.push(roadblock);
+        this.name.value = "";
     }
 
     onClick() {
@@ -278,6 +279,7 @@ class Roadblock {
     moduleAdd() {
         const module = new Module(this.modules_input.value, this.modules.length, this.index, this);
         this.modules.push(module);
+        this.modules_input.value = "";
     }
 
     moduleAddOnClick() {
@@ -506,6 +508,7 @@ class Module {
     projectAdd() {
         const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
         this.projects.push(project);
+        this.projects_input.value = "";
     }
 
     projectAddOnClick() {
