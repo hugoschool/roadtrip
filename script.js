@@ -202,6 +202,10 @@ class Roadblock {
         }
     }
 
+    moduleRemove(i) {
+        this.modules.pop(i);
+    }
+
     calculateCredits() {
         this.current_credits = 0;
         for (const module of this.modules) {
@@ -244,12 +248,12 @@ class Roadblock {
     }
 }
 
-// TODO: allow to delete a module
 class Module {
     name;
     index;
     prefix;
     roadblock_index;
+    modules_div;
     div;
     roadblock;
 
@@ -260,6 +264,7 @@ class Module {
     credits_input;
     projects_input;
     projects_button;
+    delete_button;
     projects_ul;
     taking_checkbox;
 
@@ -269,7 +274,7 @@ class Module {
         this.roadblock_index = roadblock_index;
         this.prefix = `module-${this.roadblock_index}-${this.index}`;
         this.roadblock = roadblock;
-        this.div = this.roadblock.modules_div;
+        this.modules_div = this.roadblock.modules_div;
         this.credits = 0;
         this.projects = [];
 
@@ -277,11 +282,18 @@ class Module {
     };
 
     createAll() {
+        this.createDiv();
         this.createName();
+        this.createDelete();
         this.createCredits();
         this.createTaking();
         this.createProjects();
         this.div.append(document.createElement("hr"));
+    }
+
+    createDiv() {
+        this.div = document.createElement("div");
+        this.modules_div.append(this.div);
     }
 
     createName() {
@@ -297,6 +309,16 @@ class Module {
 
         this.div.append(label);
         this.div.append(this.name_input);
+    }
+
+    createDelete() {
+        this.delete_button = document.createElement("button");
+        this.delete_button.id = `${this.prefix}-delete`;
+        this.delete_button.innerText = "Delete";
+
+        this.deleteButtonOnClick();
+
+        this.div.append(this.delete_button);
     }
 
     createCredits() {
@@ -376,6 +398,14 @@ class Module {
         this.projects_button.onclick = () => {
             const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
             this.projects.push(project);
+        };
+    }
+
+    deleteButtonOnClick() {
+        this.delete_button.onclick = () => {
+            this.roadblock.modules_div.removeChild(this.div);
+            this.roadblock.moduleRemove(this.index);
+            this.roadblock.calculateCredits();
         };
     }
 
