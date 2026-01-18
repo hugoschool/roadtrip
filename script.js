@@ -27,6 +27,20 @@ export_button.onclick = () => {
     console.log(b64roadblocks);
 }
 
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get("code");
+
+if (code) {
+    try {
+        const roadblocks = atob(code);
+        window.localStorage.setItem("roadblocks", roadblocks);
+        window.location = "/";
+    } catch (err) {
+        alert("Invalid encoded roadblocks");
+        console.err("Invalid encoded roadblocks");
+    }
+}
+
 var roadblocks = [];
 
 function serializeAll() {
