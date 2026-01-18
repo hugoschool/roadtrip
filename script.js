@@ -1,5 +1,10 @@
 const root = document.getElementById("root");
+const save = document.getElementById("save");
 const roadblocks_id = document.getElementById("roadblocks");
+
+save.onclick = () => {
+    serializeAll();
+};
 
 var roadblocks = [];
 
