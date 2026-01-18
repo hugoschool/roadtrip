@@ -132,6 +132,7 @@ class Roadblock {
         this.required_input = document.createElement("input");
         this.required_input.id = id;
         this.required_input.setAttribute("type", "number");
+        this.required_input.setAttribute("min", "0");
         this.required_input.placeholder = "None";
 
         this.requiredOnChange();
@@ -331,6 +332,7 @@ class Module {
         this.credits_input = document.createElement("input");
         this.credits_input.id = id;
         this.credits_input.setAttribute("type", "number");
+        this.credits_input.setAttribute("min", "0");
         this.credits_input.placeholder = "None";
 
         this.creditsOnChange();
