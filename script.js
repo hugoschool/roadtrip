@@ -1,7 +1,10 @@
 const root = document.getElementById("root");
 const save_button = document.getElementById("save");
-const import_button = document.getElementById("import");
-const export_button = document.getElementById("export");
+const import_code_button = document.getElementById("import-code");
+const export_code_button = document.getElementById("export-code");
+const import_file_button = document.getElementById("import-file");
+const import_file_input = document.getElementById("import-file-input");
+const export_file_button = document.getElementById("export-file");
 const roadblocks_id = document.getElementById("roadblocks");
 
 save_button.onclick = () => {
@@ -9,7 +12,7 @@ save_button.onclick = () => {
     alert("Saved!");
 };
 
-import_button.onclick = () => {
+import_code_button.onclick = () => {
     const b64roadblocks = prompt("Enter your encoded roadblocks here:");
     if (!b64roadblocks || b64roadblocks === "") {
         return;
@@ -24,11 +27,35 @@ import_button.onclick = () => {
     }
 }
 
-export_button.onclick = () => {
+import_file_input.onchange = (e) => {
+    var file = e.target.files[0];
+    if (!file) {
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var contents = e.target.result;
+        console.log(contents);
+    };
+    reader.readAsText(file);
+}
+
+export_code_button.onclick = () => {
     serializeAll();
     const b64roadblocks = btoa(window.localStorage.getItem("roadblocks"));
     alert(`This is your encoded roadblocks:\n\n${b64roadblocks}`);
     console.log(b64roadblocks);
+}
+
+export_file_button.onclick = () => {
+    serializeAll();
+    const roadblocks_item = window.localStorage.getItem("roadblocks");
+
+    var a = document.createElement("a");
+    var file = new Blob([roadblocks_item], { type: "application/json" });
+    a.href = URL.createObjectURL(file);
+    a.download = "roadblocks.json";
+    a.click();
 }
 
 const urlParams = new URLSearchParams(window.location.search);
