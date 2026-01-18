@@ -1,4 +1,7 @@
-@import url("./Inter-Variable.ttf");
+@font-face {
+    font-family: "Inter";
+    src: url("./Inter-Variable.ttf") format("truetype");
+}
 
 body {
     font-family: "Inter", sans-serif;
