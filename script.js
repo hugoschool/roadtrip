@@ -68,10 +68,23 @@ class NewRoadblock {
     name;
     add;
 
+    addRoadblock() {
+        const roadblock = new Roadblock(this.name.value, roadblocks.length);
+        roadblocks.push(roadblock);
+    }
+
     onClick() {
         this.add.onclick = () => {
-            const roadblock = new Roadblock(this.name.value, roadblocks.length);
-            roadblocks.push(roadblock);
+            this.addRoadblock();
+        }
+    }
+
+    onEnter() {
+        this.name.onkeyup = (e) => {
+            if (e.key !== "Enter") {
+                return
+            }
+            this.addRoadblock();
         }
     }
 
@@ -80,6 +93,7 @@ class NewRoadblock {
         this.add = document.getElementById("new-roadblock-add");
 
         this.onClick();
+        this.onEnter();
     }
 }
 
@@ -225,7 +239,8 @@ class Roadblock {
         div.append(this.modules_button);
         this.div.append(div);
 
-        this.modulesAddOnClick();
+        this.moduleAddOnClick();
+        this.moduleAddOnEnter();
     }
 
     nameOnChange() {
@@ -234,11 +249,24 @@ class Roadblock {
         };
     }
 
-    modulesAddOnClick() {
+    moduleAdd() {
+        const module = new Module(this.modules_input.value, this.modules.length, this.index, this);
+        this.modules.push(module);
+    }
+
+    moduleAddOnClick() {
         this.modules_button.onclick = () => {
-            const module = new Module(this.modules_input.value, this.modules.length, this.index, this);
-            this.modules.push(module);
+            this.moduleAdd();
         };
+    }
+
+    moduleAddOnEnter() {
+        this.modules_input.onkeyup = (e) => {
+            if (e.key !== "Enter") {
+                return
+            }
+            this.moduleAdd();
+        }
     }
 
     requiredOnChange() {
@@ -427,6 +455,7 @@ class Module {
         this.div.append(div);
 
         this.projectAddOnClick();
+        this.projectAddOnEnter();
     }
 
     nameOnChange() {
@@ -448,11 +477,24 @@ class Module {
         }
     }
 
+    projectAdd() {
+        const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
+        this.projects.push(project);
+    }
+
     projectAddOnClick() {
         this.projects_button.onclick = () => {
-            const project = new Project(this.projects_input.value, this.projects.length, this.prefix, this);
-            this.projects.push(project);
+            this.projectAdd();
         };
+    }
+
+    projectAddOnEnter() {
+        this.projects_input.onkeyup = (e) => {
+            if (e.key !== "Enter") {
+                return
+            }
+            this.projectAdd();
+        }
     }
 
     deleteButtonOnClick() {
