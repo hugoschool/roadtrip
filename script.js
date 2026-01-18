@@ -11,6 +11,9 @@ save_button.onclick = () => {
 
 import_button.onclick = () => {
     const b64roadblocks = prompt("Enter your encoded roadblocks here:");
+    if (!b64roadblocks || b64roadblocks === "") {
+        return;
+    }
     try {
         const roadblocks = atob(b64roadblocks);
         window.localStorage.setItem("roadblocks", roadblocks);
