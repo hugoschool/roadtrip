@@ -1,7 +1,7 @@
 const root = document.getElementById("root");
 const roadblocks_id = document.getElementById("roadblocks");
 
-var roadblocks;
+var roadblocks = [];
 
 function serializeAll() {
     const serialized = roadblocks.map((roadblock) => roadblock.serialize);
@@ -42,6 +42,26 @@ class NewRoadblock {
         this.onClick();
     }
 }
+
+class Total {
+    total_element;
+
+    constructor() {
+        this.total_element = document.getElementById("total-credits");
+    }
+
+    calculate() {
+        const total = roadblocks.map((roadblock) => roadblock.current_credits);
+
+        if (total.length === 0) {
+            this.total_element.innerText = 0;
+        } else {
+            this.total_element.innerText = total;
+        }
+    }
+}
+
+var total = new Total();
 
 class Roadblock {
     name;
@@ -190,6 +210,7 @@ class Roadblock {
             }
         }
         this.current_span.innerText = this.current_credits;
+        total.calculate();
     }
 
     setRequired(amount) {
@@ -204,7 +225,6 @@ class Roadblock {
             name: this.name,
             index: this.index,
             required_credits: this.required_credits,
-            current_credits: this.current_credits,
             modules: modules
         };
     }
@@ -212,12 +232,13 @@ class Roadblock {
     static deserialize(obj) {
         const roadblock = new Roadblock(obj["name"], obj["index"]);
 
-        roadblock.current_credits = obj["current_credits"];
         roadblock.setRequired(obj["required_credits"]);
 
         for (const module of obj["modules"]) {
             roadblock.modules.push(Module.deserialize(module, roadblock));
         }
+
+        roadblock.calculateCredits();
 
         return roadblock;
     }
@@ -456,4 +477,5 @@ class Project {
 }
 
 roadblocks = deserializeAll();
+total.calculate();
 new NewRoadblock();
