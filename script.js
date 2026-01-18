@@ -144,6 +144,7 @@ class Roadblock {
 
     createAll() {
         this.createDiv();
+        this.createDelete();
         this.createName();
         this.createRequired();
         this.createCurrent();
@@ -157,7 +158,17 @@ class Roadblock {
         roadblocks_id.append(this.div);
     }
 
+    createDelete() {
+        this.delete_button = document.createElement("button");
+        this.delete_button.innerText = "Delete";
+
+        this.deleteButtonOnClick();
+
+        this.div.append(this.delete_button);
+    }
+
     createName() {
+        const div = document.createElement("div");
         const id = `${this.prefix}-name`;
         const label = document.createElement("label");
         label.setAttribute("for", id);
@@ -170,8 +181,9 @@ class Roadblock {
 
         this.nameOnChange();
 
-        this.div.append(label);
-        this.div.append(this.name_input);
+        div.append(label);
+        div.append(this.name_input);
+        this.div.append(div);
     }
 
     createRequired() {
@@ -241,6 +253,16 @@ class Roadblock {
 
         this.moduleAddOnClick();
         this.moduleAddOnEnter();
+    }
+
+    deleteButtonOnClick() {
+        this.delete_button.onclick = () => {
+            if (confirm(`Are you sure you want to delete ${this.name}? (Contains ${this.modules.length} modules)`)) {
+                roadblocks_id.removeChild(this.div);
+                roadblocks.pop(this.index);
+                total.calculate();
+            }
+        };
     }
 
     nameOnChange() {
