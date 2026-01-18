@@ -1,8 +1,28 @@
 const root = document.getElementById("root");
 const roadblocks_id = document.getElementById("roadblocks");
 
-// TODO: add this to localStorage
-let roadblocks = [];
+var roadblocks;
+
+function serializeAll() {
+    const serialized = roadblocks.map((roadblock) => roadblock.serialize);
+
+    window.localStorage.setItem("roadblocks", JSON.stringify(serialized));
+}
+
+function deserializeAll() {
+    const serialized = JSON.parse(window.localStorage.getItem("roadblocks"));
+    let deserialized = [];
+
+    if (!serialized) {
+        return deserialized;
+    }
+
+    for (const serialized_road of serialized) {
+        deserialized.push(Roadblock.deserialize(serialized_road));
+    }
+
+    return deserialized;
+}
 
 class NewRoadblock {
     name;
@@ -31,6 +51,7 @@ class Roadblock {
     prefix;
 
     current_credits;
+    required_credits;
     modules;
 
     name_input;
@@ -93,6 +114,8 @@ class Roadblock {
         this.required_input.setAttribute("type", "number");
         this.required_input.placeholder = "None";
 
+        this.requiredOnChange();
+
         div.append(label);
         div.append(this.required_input);
         this.div.append(div);
@@ -148,9 +171,15 @@ class Roadblock {
 
     modulesAddOnClick() {
         this.modules_button.onclick = () => {
-            const module = new Module(this.modules_input.value, this.modules.length, this.index, this.modules_div.id, this);
+            const module = new Module(this.modules_input.value, this.modules.length, this.index, this);
             this.modules.push(module);
         };
+    }
+
+    requiredOnChange() {
+        this.required_input.onchange = () => {
+            this.required_credits = this.required_input.value;
+        }
     }
 
     calculateCredits() {
@@ -161,6 +190,36 @@ class Roadblock {
             }
         }
         this.current_span.innerText = this.current_credits;
+    }
+
+    setRequired(amount) {
+        this.required_credits = amount;
+        this.required_input.value = amount;
+    }
+
+    get serialize() {
+        const modules = this.modules.map((module) => module.serialize);
+
+        return {
+            name: this.name,
+            index: this.index,
+            required_credits: this.required_credits,
+            current_credits: this.current_credits,
+            modules: modules
+        };
+    }
+
+    static deserialize(obj) {
+        const roadblock = new Roadblock(obj["name"], obj["index"]);
+
+        roadblock.current_credits = obj["current_credits"];
+        roadblock.setRequired(obj["required_credits"]);
+
+        for (const module of obj["modules"]) {
+            roadblock.modules.push(Module.deserialize(module, roadblock));
+        }
+
+        return roadblock;
     }
 }
 
@@ -183,13 +242,13 @@ class Module {
     projects_ul;
     taking_checkbox;
 
-    constructor(name, index, roadblock_index, div_id, roadblock) {
+    constructor(name, index, roadblock_index, roadblock) {
         this.name = name;
         this.index = index;
         this.roadblock_index = roadblock_index;
         this.prefix = `module-${this.roadblock_index}-${this.index}`;
-        this.div = document.getElementById(div_id);
         this.roadblock = roadblock;
+        this.div = this.roadblock.modules_div;
         this.credits = 0;
         this.projects = [];
 
@@ -306,6 +365,41 @@ class Module {
     isTaking() {
         return this.taking_checkbox.checked;
     }
+
+    setTaking(state) {
+        this.taking_checkbox.checked = state;
+    }
+
+    setCredits(amount) {
+        this.credits = amount;
+        this.credits_input.value = amount;
+    }
+
+    get serialize() {
+        const projects = this.projects.map((p) => p.serialize);
+
+        return {
+            name: this.name,
+            index: this.index,
+            roadblock_index: this.roadblock_index,
+            credits: this.credits,
+            taking: this.isTaking(),
+            projects: projects
+        };
+    }
+
+    static deserialize(obj, roadblock) {
+        const module = new Module(obj["name"], obj["index"], obj["roadblock_index"], roadblock);
+
+        module.setCredits(obj["credits"]);
+        module.setTaking(obj["taking"]);
+
+        for (const project of obj["projects"]) {
+            module.projects.push(Project.deserialize(project, module));
+        }
+
+        return module;
+    }
 }
 
 class Project {
@@ -349,6 +443,17 @@ class Project {
             this.module.projectRemove(this.index);
         };
     }
+
+    get serialize() {
+        return {name: this.name, index: this.index};
+    }
+
+    static deserialize(obj, module) {
+        const project = new Project(obj["name"], obj["index"], module.prefix, module);
+
+        return project;
+    }
 }
 
+roadblocks = deserializeAll();
 new NewRoadblock();
