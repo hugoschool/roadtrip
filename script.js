@@ -130,6 +130,7 @@ class Roadblock {
     modules;
 
     name_input;
+    name_div;
     required_input;
     current_span;
 
@@ -149,54 +150,53 @@ class Roadblock {
 
     createAll() {
         this.createDiv();
-        this.createDelete();
         this.createName();
+        this.createDelete();
         this.createRequired();
         this.createCurrent();
         this.createModulesStructure();
-        this.div.append(document.createElement("hr"));
     }
 
     createDiv() {
         this.div = document.createElement("div");
+        this.div.className = "roadblock";
         this.div.id = this.prefix;
+
         roadblocks_id.append(this.div);
     }
 
     createDelete() {
         this.delete_button = document.createElement("button");
-        this.delete_button.innerText = "Delete";
+        this.delete_button.innerText = "🗑️";
 
         this.deleteButtonOnClick();
 
-        this.div.append(this.delete_button);
+        this.name_div.append(this.delete_button);
     }
 
     createName() {
-        const div = document.createElement("div");
+        this.name_div = document.createElement("div");
         const id = `${this.prefix}-name`;
-        const label = document.createElement("label");
-        label.setAttribute("for", id);
-        label.innerText = "Roadblock Name";
 
         this.name_input = document.createElement("input");
+        this.name_input.className = "modifiable";
         this.name_input.id = id;
         this.name_input.placeholder = "Roadblock Name";
         this.name_input.value = this.name;
 
         this.nameOnChange();
 
-        div.append(label);
-        div.append(this.name_input);
-        this.div.append(div);
+        this.name_div.append(this.name_input);
+        this.div.append(this.name_div);
     }
 
     createRequired() {
         const div = document.createElement("div");
+        div.className = "roadblock-label";
         const label = document.createElement("label");
         const id = `${this.prefix}-required`;
         label.setAttribute("for", id);
-        label.innerText = "Required:";
+        label.innerText = "Required: ";
 
         this.required_input = document.createElement("input");
         this.required_input.id = id;
@@ -213,10 +213,11 @@ class Roadblock {
 
     createCurrent() {
         const div = document.createElement("div");
+        div.className = "roadblock-label";
         const label = document.createElement("label");
         const id = `${this.prefix}-current`;
         label.setAttribute("for", id);
-        label.innerText = "Current:";
+        label.innerText = "Current: ";
 
         this.current_span = document.createElement("span");
         this.current_span.id = id;
@@ -229,31 +230,34 @@ class Roadblock {
 
     createModulesStructure() {
         const div = document.createElement("div");
+        div.className = "modules-root";
         const title = document.createElement("h3");
+        title.style = "margin: 0.5rem 0 0.5rem 0;";
         const modules_prefix = `${this.prefix}-module`;
-        title.innerText = "Modules:";
+        title.innerText = "Modules: ";
 
         this.modules_div = document.createElement("div");
-        this.modules_div.id = `${modules_prefix}-projects`;
+        this.modules_div.className = "modules-list";
+        this.modules_div.id = `${modules_prefix}-${this.modules.length}`;
 
         let id = `${modules_prefix}-name`;
-        const modules_label = document.createElement("label");
-        modules_label.setAttribute("for", id);
-        modules_label.innerText = "Module Name";
 
+        const add_div = document.createElement("div");
+        add_div.className = "hcenter";
         this.modules_input = document.createElement("input");
         this.modules_input.id = id;
         this.modules_input.placeholder = "Module Name";
 
         this.modules_button = document.createElement("button");
         this.modules_button.id = `${modules_prefix}-add`;
-        this.modules_button.innerText = "Add";
+        this.modules_button.innerText = "➕";
+
+        add_div.append(this.modules_input);
+        add_div.append(this.modules_button);
 
         div.append(title);
         div.append(this.modules_div);
-        div.append(modules_label);
-        div.append(this.modules_input);
-        div.append(this.modules_button);
+        div.append(add_div);
         this.div.append(div);
 
         this.moduleAddOnClick();
@@ -389,35 +393,32 @@ class Module {
         this.createCredits();
         this.createTaking();
         this.createProjects();
-        this.div.append(document.createElement("hr"));
     }
 
     createDiv() {
         this.div = document.createElement("div");
+        this.div.className = "module";
         this.modules_div.append(this.div);
     }
 
     createName() {
         const id = `${this.prefix}-module_name`;
-        const label = document.createElement("label");
-        label.setAttribute("for", id);
-        label.innerText = "Module Name";
 
         this.name_input = document.createElement("input");
+        this.name_input.className = "modifiable";
         this.name_input.id = id;
         this.name_input.value = this.name;
         this.name_input.placeholder = "Module Name";
 
         this.nameOnChange();
 
-        this.div.append(label);
         this.div.append(this.name_input);
     }
 
     createDelete() {
         this.delete_button = document.createElement("button");
         this.delete_button.id = `${this.prefix}-delete`;
-        this.delete_button.innerText = "Delete";
+        this.delete_button.innerText = "🗑️";
 
         this.deleteButtonOnClick();
 
@@ -429,7 +430,7 @@ class Module {
         const label = document.createElement("label");
         const id = `${this.prefix}-credits`;
         label.setAttribute("for", id);
-        label.innerText = "Credits:";
+        label.innerText = "Credits: ";
 
         this.credits_input = document.createElement("input");
         this.credits_input.id = id;
@@ -448,7 +449,7 @@ class Module {
         const id = `${this.prefix}-taking`;
         const label = document.createElement("label");
         label.setAttribute("for", id);
-        label.innerText = "Taking";
+        label.innerText = "Taking: ";
 
         this.taking_checkbox = document.createElement("input");
         this.taking_checkbox.id = id;
@@ -462,12 +463,13 @@ class Module {
 
     createProjects() {
         const div = document.createElement("div");
-        const label = document.createElement("label");
         const id = `${this.prefix}-project`;
-        label.innerText = "Projects:";
 
         this.projects_ul = document.createElement("ul");
         this.projects_ul.id = `${id}s`;
+
+        const add_div = document.createElement("div");
+        add_div.className = "hcenter";
 
         this.projects_input = document.createElement("input");
         this.projects_input.id = `${id}s-name`;
@@ -475,11 +477,12 @@ class Module {
 
         this.projects_button = document.createElement("button");
         this.projects_button.id = `${id}s-add`;
-        this.projects_button.innerText = "Add";
+        this.projects_button.innerText = "➕";
 
+        add_div.append(this.projects_input);
+        add_div.append(this.projects_button);
         div.append(this.projects_ul);
-        div.append(this.projects_input);
-        div.append(this.projects_button);
+        div.append(add_div);
         this.div.append(div);
 
         this.projectAddOnClick();
@@ -603,15 +606,21 @@ class Project {
     create() {
         this.li = document.createElement("li");
         this.li.id = this.prefix;
-        this.li.innerText = this.name;
+
+        const div = document.createElement("div");
+        div.className = "project-element";
+        const span = document.createElement("span");
+        span.innerText = this.name;
 
         this.delete_button = document.createElement("button");
         this.delete_button.id = `${this.prefix}-delete`;
-        this.delete_button.innerText = "Delete";
+        this.delete_button.innerText = "🗑️";
 
         this.deleteButtonOnClick();
 
-        this.li.append(this.delete_button);
+        div.append(span);
+        div.append(this.delete_button);
+        this.li.append(div);
         this.ul.append(this.li);
     }
 

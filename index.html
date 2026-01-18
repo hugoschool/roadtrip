@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roadtrip</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="root">
@@ -13,14 +14,18 @@
             <button id="import">Import</button>
             <button id="export">Export</button>
         </div>
-        <div id="roadblocks">
-            <h2>Roadblocks</h2>
+        <div class="total">
+            <h2><span id="total-credits">0</span> credits</h2>
         </div>
-        <input id="new-roadblock-name" placeholder="New Roadblock Name" />
-        <button id="new-roadblock-add">Add</button>
-        <hr/>
-        <h1>Total</h1>
-        <h2><span id="total-credits">0</span> credits</h2>
+        <hr>
+        <div class="roadblocks-root">
+            <h2>Roadblocks</h2>
+            <div id="roadblocks"></div>
+            <div>
+                <input id="new-roadblock-name" placeholder="New Roadblock Name" />
+                <button id="new-roadblock-add">➕</button>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
