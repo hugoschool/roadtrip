@@ -1,10 +1,31 @@
 const root = document.getElementById("root");
-const save = document.getElementById("save");
+const save_button = document.getElementById("save");
+const import_button = document.getElementById("import");
+const export_button = document.getElementById("export");
 const roadblocks_id = document.getElementById("roadblocks");
 
-save.onclick = () => {
+save_button.onclick = () => {
     serializeAll();
+    alert("Saved!");
 };
+
+import_button.onclick = () => {
+    const b64roadblocks = prompt("Enter your encoded roadblocks here:");
+    try {
+        const roadblocks = atob(b64roadblocks);
+        window.localStorage.setItem("roadblocks", roadblocks);
+        window.location.reload();
+    } catch (err) {
+        alert("Invalid encoded roadblocks");
+        console.err("Invalid encoded roadblocks");
+    }
+}
+
+export_button.onclick = () => {
+    const b64roadblocks = btoa(window.localStorage.getItem("roadblocks"));
+    alert(`This is your encoded roadblocks:\n\n${b64roadblocks}`);
+    console.log(b64roadblocks);
+}
 
 var roadblocks = [];
 
