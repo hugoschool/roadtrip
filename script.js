@@ -521,9 +521,11 @@ class Module {
 
     deleteButtonOnClick() {
         this.delete_button.onclick = () => {
-            this.roadblock.modules_div.removeChild(this.div);
-            this.roadblock.moduleRemove(this.index);
-            this.roadblock.calculateCredits();
+            if (confirm(`Are you sure you want to delete ${this.name}?`)) {
+                this.roadblock.modules_div.removeChild(this.div);
+                this.roadblock.moduleRemove(this.index);
+                this.roadblock.calculateCredits();
+            }
         };
     }
 
