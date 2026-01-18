@@ -123,6 +123,8 @@ class Roadblock {
         this.name_input.placeholder = "Roadblock Name";
         this.name_input.value = this.name;
 
+        this.nameOnChange();
+
         this.div.append(label);
         this.div.append(this.name_input);
     }
@@ -193,6 +195,12 @@ class Roadblock {
         this.div.append(div);
 
         this.modulesAddOnClick();
+    }
+
+    nameOnChange() {
+        this.name_input.onchange = () => {
+            this.name = this.name_input.value;
+        };
     }
 
     modulesAddOnClick() {
@@ -313,6 +321,8 @@ class Module {
         this.name_input.value = this.name;
         this.name_input.placeholder = "Module Name";
 
+        this.nameOnChange();
+
         this.div.append(label);
         this.div.append(this.name_input);
     }
@@ -386,6 +396,12 @@ class Module {
         this.div.append(div);
 
         this.projectAddOnClick();
+    }
+
+    nameOnChange() {
+        this.name_input.onchange = () => {
+            this.name = this.name_input.value;
+        };
     }
 
     creditsOnChange() {
