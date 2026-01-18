@@ -22,6 +22,7 @@ import_button.onclick = () => {
 }
 
 export_button.onclick = () => {
+    serializeAll();
     const b64roadblocks = btoa(window.localStorage.getItem("roadblocks"));
     alert(`This is your encoded roadblocks:\n\n${b64roadblocks}`);
     console.log(b64roadblocks);
