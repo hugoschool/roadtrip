@@ -2,6 +2,7 @@ const root = document.getElementById("root");
 const save_button = document.getElementById("save");
 const import_button = document.getElementById("import");
 const export_button = document.getElementById("export");
+const reset_button = document.getElementById("reset");
 const roadblocks_id = document.getElementById("roadblocks");
 
 save_button.onclick = () => {
@@ -29,6 +30,13 @@ export_button.onclick = () => {
     const b64roadblocks = btoa(window.localStorage.getItem("roadblocks"));
     alert(`This is your encoded roadblocks:\n\n${b64roadblocks}`);
     console.log(b64roadblocks);
+}
+
+reset_button.onclick = () => {
+    if (confirm("Are you sure you want to reset?")) {
+        window.localStorage.removeItem("roadblocks");
+        window.location.reload();
+    }
 }
 
 const urlParams = new URLSearchParams(window.location.search);
